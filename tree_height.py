@@ -1,4 +1,4 @@
-#Dinārs Kemzāns 221RDB321
+#Dinārs Kemzāns 221RDB321 17.grupa
 
 import sys
 import threading
@@ -6,14 +6,20 @@ import threading
 
 def compute_height(n, parents):
     # Write this function
+    resultats = [-1] * n
+
+    def aprekins(node):
+        if resultats[node] != -1:
+            return resultats[node]
+        if parents[node] == -1:
+            resultats[node] = 1
+        else:
+            resultats[node] = aprekins(parents[node]) + 1
+        return resultats[node]
+
     max_height = 0
     for x in range(n):
-        dzilums = 0
-        id = x
-        while id != -1:
-            dzilums = dzilums + 1
-            id = parents[id]
-        max_height = max(max_height, dzilums)
+        max_height = max(max_height, aprekins(x))
 
     return max_height
 
@@ -28,10 +34,9 @@ def main():
     if "F" in text:
         name = str(input())
         name = "test/" + str(name)
-        file = open(name,'r')
-        skaits = int(file.readline())
-        dati = list(map(int, file.readline().split()))
-        file.close()
+        with open(name, 'r') as file:
+            skaits = int(file.readline())
+            dati = list(map(int, file.readline().split()))
         print(compute_height(skaits, dati))
 
 
